@@ -3,101 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtu360 | Johnny Bermúdez - Constructor Maestro de Prompts</title>
+    <title>virtu360 | Generador de Prompt - Johnny Bermúdez</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .gradient-text {
-            /* Azul -> Naranja */
-            background: linear-gradient(to right, #2563eb, #f97316);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        body { font-family: 'Outfit', sans-serif; }
+        
+        /* 3D Button Effect */
+        .btn-3d {
+            transition: all 0.1s;
+            box-shadow: 0px 10px 0px 0px #b45309; /* Darker orange shadow */
         }
-        .step-card {
-            transition: all 0.3s ease;
+        .btn-3d:active {
+            transform: translateY(10px);
+            box-shadow: 0px 0px 0px 0px #b45309;
         }
-        .step-card:focus-within {
-            /* Resaltado en azul */
-            border-color: #2563eb;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
-            transform: translateY(-2px);
+
+        /* 3D Card Effect */
+        .card-3d {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-bottom: 4px solid #e2e8f0;
         }
+        .card-3d:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-bottom: 4px solid #cbd5e1;
+        }
+        .card-3d:focus-within {
+            border-bottom-color: #f97316; /* Orange border on focus */
+            transform: translateY(-4px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 min-h-screen flex flex-col selection:bg-orange-200 selection:text-orange-900">
 
     <!-- Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="bg-blue-600 text-white p-2 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+    <header class="bg-white sticky top-0 z-20 border-b border-slate-200 shadow-sm backdrop-blur-md bg-white/90">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <!-- Logo Icon -->
+                <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-2.5 rounded-xl shadow-lg shadow-blue-200 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
                 </div>
                 <div>
-                    <h1 class="font-bold text-xl tracking-tight text-slate-900">
-                        Virtu<span class="text-orange-500">360</span>
+                    <h1 class="font-extrabold text-2xl tracking-tight text-slate-900 leading-none">
+                        virtu<span class="text-orange-500">360</span>
                     </h1>
-                    <p class="text-xs text-slate-500">Johnny Bermúdez · Constructor Maestro de Prompts</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full uppercase tracking-wider">Pro Tools</span>
+                        <p class="text-xs font-semibold text-slate-400">Johnny Bermúdez</p>
+                    </div>
                 </div>
             </div>
-            <button onclick="document.getElementById('guide-modal').classList.remove('hidden')" class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+            <button onclick="document.getElementById('guide-modal').classList.remove('hidden')" class="hidden sm:flex group items-center gap-2 text-sm font-bold text-slate-600 hover:text-orange-600 transition-colors bg-white border-2 border-slate-100 hover:border-orange-100 px-4 py-2 rounded-xl shadow-sm hover:shadow-md">
+                <span class="bg-orange-100 text-orange-600 p-1 rounded-md group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                </span>
                 ¿Cómo funciona?
             </button>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-5xl mx-auto px-4 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-10">
         
         <!-- Left Column: Input Form -->
-        <div class="lg:col-span-7 space-y-6">
+        <div class="lg:col-span-7 space-y-8">
             
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 class="text-2xl font-bold mb-2">Diseña tu Instrucción</h2>
-                <p class="text-slate-500 text-sm mb-6">Rellena los bloques. No te preocupes por la redacción, el sistema lo estructurará por ti.</p>
+            <div class="bg-white p-1 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div class="bg-white p-6 sm:p-8 rounded-[20px]">
+                    <div class="mb-8 border-l-4 border-orange-500 pl-4">
+                        <h2 class="text-3xl font-extrabold text-slate-800">Diseña tu Instrucción</h2>
+                        <p class="text-slate-500 font-medium mt-1">Usa el método R.C.E.F.E. para resultados de alto nivel.</p>
+                    </div>
 
-                <!-- ROL -->
-                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">R</span>
-                        ROL (Persona)
-                    </label>
-                    <p class="text-xs text-slate-400 mb-2">¿Quién debe ser la IA? (Experto, Crítico, Creativo...)</p>
-                    <input type="text" id="input-rol" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Eres un experto en Marketing Digital con 10 años de experiencia...">
+                    <div class="space-y-6">
+                        <!-- ROL -->
+                        <div class="card-3d bg-white rounded-2xl p-5 border border-slate-100 relative group">
+                            <div class="absolute -left-3 top-5 w-6 h-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-md z-10 group-hover:scale-110 transition-transform">R</div>
+                            <div class="pl-5">
+                                <label class="block text-sm font-bold text-slate-700 mb-1">ROL (Persona)</label>
+                                <p class="text-xs text-slate-400 font-medium mb-3 uppercase tracking-wide">¿Quién es la IA hoy?</p>
+                                <input type="text" id="input-rol" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-400" placeholder="Ej: Eres un experto en Marketing Digital...">
+                            </div>
+                        </div>
+
+                        <!-- CONTEXTO -->
+                        <div class="card-3d bg-white rounded-2xl p-5 border border-slate-100 relative group">
+                            <div class="absolute -left-3 top-5 w-6 h-6 bg-orange-500 text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-md z-10 group-hover:scale-110 transition-transform">C</div>
+                            <div class="pl-5">
+                                <label class="block text-sm font-bold text-slate-700 mb-1">CONTEXTO</label>
+                                <p class="text-xs text-slate-400 font-medium mb-3 uppercase tracking-wide">Antecedentes y Situación</p>
+                                <textarea id="input-contexto" rows="3" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:outline-none focus:border-orange-500 focus:bg-white transition-all placeholder:text-slate-400 resize-none" placeholder="Ej: Queremos vender café a jóvenes universitarios..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- ESPECIFICACIÓN (TAREA) -->
+                        <div class="card-3d bg-blue-50/50 rounded-2xl p-5 border border-blue-100 relative group">
+                            <div class="absolute -left-3 top-5 w-6 h-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-md z-10 group-hover:scale-110 transition-transform">E</div>
+                            <div class="pl-5">
+                                <label class="block text-sm font-bold text-blue-900 mb-1 flex justify-between">
+                                    ESPECIFICACIÓN (Tarea)
+                                    <span class="text-[10px] bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">Vital</span>
+                                </label>
+                                <p class="text-xs text-blue-400 font-medium mb-3 uppercase tracking-wide">Verbo de acción directo</p>
+                                <textarea id="input-tarea" rows="2" class="w-full bg-white border-2 border-blue-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-400 resize-none" placeholder="Ej: Escribe 5 guiones de 30 segundos..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- FORMATO -->
+                        <div class="card-3d bg-white rounded-2xl p-5 border border-slate-100 relative group">
+                            <div class="absolute -left-3 top-5 w-6 h-6 bg-orange-500 text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-md z-10 group-hover:scale-110 transition-transform">F</div>
+                            <div class="pl-5">
+                                <label class="block text-sm font-bold text-slate-700 mb-1">FORMATO</label>
+                                <p class="text-xs text-slate-400 font-medium mb-3 uppercase tracking-wide">Estructura visual</p>
+                                <input type="text" id="input-formato" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:outline-none focus:border-orange-500 focus:bg-white transition-all placeholder:text-slate-400" placeholder="Ej: Tabla Markdown, Lista de Bullets...">
+                            </div>
+                        </div>
+
+                        <!-- EJEMPLO -->
+                        <div class="card-3d bg-white rounded-2xl p-5 border border-slate-100 relative group">
+                            <div class="absolute -left-3 top-5 w-6 h-6 bg-slate-700 text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-md z-10 group-hover:scale-110 transition-transform">E</div>
+                            <div class="pl-5">
+                                <label class="block text-sm font-bold text-slate-700 mb-1">EJEMPLO (Few-Shot)</label>
+                                <p class="text-xs text-slate-400 font-medium mb-3 uppercase tracking-wide">Referencia de estilo</p>
+                                <textarea id="input-ejemplo" rows="2" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:outline-none focus:border-slate-500 focus:bg-white transition-all placeholder:text-slate-400 resize-none" placeholder="Ej: 'Hola 👋' (Tono casual con emojis)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <button onclick="generatePrompt()" class="btn-3d w-full bg-orange-500 hover:bg-orange-400 text-white font-black text-lg py-5 rounded-2xl flex items-center justify-center gap-3 uppercase tracking-wide transform transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></svg>
+                            Construir Prompt Maestro
+                        </button>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- CONTEXTO -->
-                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
-                        <span class="bg-indigo-100 text-indigo-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">C</span>
-                        CONTEXTO
-                    </label>
-                    <p class="text-xs text-slate-400 mb-2">¿Cuál es la situación? Datos clave, audiencia, limitaciones.</p>
-                    <textarea id="input-contexto" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Estamos lanzando una marca de café orgánico en Instagram. La audiencia son jóvenes de 20-30 años..."></textarea>
+        <!-- Right Column: Output -->
+        <div class="lg:col-span-5 relative">
+            <div class="sticky top-24">
+                <!-- Output Container - Dark Theme -->
+                <div class="bg-slate-900 rounded-[24px] shadow-2xl shadow-blue-900/20 border border-slate-700 flex flex-col h-[700px] overflow-hidden relative">
+                    
+                    <!-- Top Bar -->
+                    <div class="bg-slate-800/50 p-4 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
+                        <div class="flex items-center gap-2">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <span class="ml-3 text-xs font-mono text-slate-400">terminal.prompt</span>
+                        </div>
+                        <div class="text-[10px] font-bold bg-blue-600/20 text-blue-400 px-2 py-1 rounded border border-blue-500/30">
+                            READY TO COPY
+                        </div>
+                    </div>
+                    
+                    <!-- TextArea -->
+                    <div class="relative flex-grow bg-slate-900">
+                        <textarea id="output-area" readonly class="w-full h-full bg-transparent text-slate-200 p-6 font-mono text-sm leading-7 focus:outline-none resize-none selection:bg-blue-500/30" placeholder="// El resultado aparecerá aquí..."></textarea>
+                        
+                        <!-- Empty State Overlay -->
+                        <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500 pointer-events-none p-10 text-center">
+                            <div class="w-20 h-20 bg-slate-800 rounded-2xl flex items-center justify-center mb-4 border border-slate-700 shadow-inner">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                            </div>
+                            <h3 class="text-slate-300 font-bold text-lg">Esperando Input</h3>
+                            <p class="text-sm mt-2 text-slate-500">Completa los bloques a la izquierda para generar magia.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Actions -->
+                    <div class="p-4 bg-slate-800 border-t border-slate-700">
+                        <div class="flex gap-3">
+                            <button onclick="copyToClipboard()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-[0_4px_0_0_#1e40af] active:translate-y-1 active:shadow-none flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                COPIAR
+                            </button>
+                            <button onclick="clearFields()" class="px-5 py-3.5 bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold rounded-xl transition-all shadow-[0_4px_0_0_#334155] active:translate-y-1 active:shadow-none" title="Limpiar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1 1 2 2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- ESPECIFICACIÓN (TAREA) -->
-                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white ring-2 ring-indigo-50/50">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
-                        <span class="bg-purple-100 text-purple-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">E</span>
-                        ESPECIFICACIÓN (Tarea)
-                    </label>
-                    <p class="text-xs text-slate-400 mb-2">¿Qué debe hacer exactamente? Usa verbos de acción.</p>
-                    <textarea id="input-tarea" rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Redacta 5 ideas de contenido viral y escribe los guiones para los videos."></textarea>
+                
+                <!-- Tips Box (Floating 3D) -->
+                <div class="mt-6 bg-gradient-to-r from-orange-50 to-orange-100 p-5 rounded-2xl border border-orange-200 shadow-lg relative overflow-hidden group">
+                    <div class="absolute right-0 top-0 w-24 h-24 bg-orange-200 rounded-full blur-2xl opacity-20 -mr-10 -mt-10"></div>
+                    <h4 class="text-orange-900 font-black text-xs uppercase tracking-widest mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+                        Tip Experto
+                    </h4>
+                    <p id="dynamic-tip" class="text-sm text-slate-700 font-medium leading-relaxed">El contexto es el rey. Si la IA alucina, suele ser porque le faltan datos de fondo en el bloque "Contexto".</p>
                 </div>
+            </div>
+        </div>
+    </main>
 
-                <!-- FORMATO -->
-                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
-                        <span class="bg-pink-100 text-pink-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">F</span>
-                        FORMATO
-                    </label>
-                    <p class="text-xs text-slate-400 mb-2">¿Cómo quieres que se vea la respuesta? (Tabla, Código, Lista...)</p>
-                    <input type="text" id="input-formato" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Tabla comparativa, lista con viñetas, código Python, tono formal...">
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                 <div class="bg-slate-900 text-white p-1.5 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
                 </div>
+                <span class="font-extrabold text-xl text-slate-800 tracking-tight">virtu<span class="text-orange-500">360</span></span>
+            </div>
+            <p class="text-slate-400 text-sm font-medium">
+                Herramienta de productividad potenciada por IA • <span class="text-slate-600">Johnny Bermúdez</span>
+            </p>
+        </div>
+    </footer>
 
-                <!-- EJEMPLO -->
-                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
-                        <span class="bg-emerald-100 text-emerald-700 w-6 h-6 flex items-center justify-center
+    <!-- Modal Help -->
+    <div id="guide-modal" class="fixed inset-0 bg-slate-900/40 z-50 hidden flex items-center justify-center p-4 backdrop-blur-md transition-opacity">
+        <div class="bg-white rounded-[30px] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all border-4 border-slate-100">
+            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div>
+                    <h3 class="text-2xl font-extrabold text-slate-800">Framework R.C.E.F.E.</h3>
+                    <p class="text-sm font-semibold text-orange-500">Metodología de Johnny Bermúdez</p>
+                </div>
+                <button onclick="document.getElementById('guide-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 bg-white hover:bg-slate-100 p-2 rounded-full transition-colors border border-slate-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-8 space-y-4">
+                <p class="text-slate-600 mb-6 font-medium">Sigue esta fórmula secreta para desbloquear el verdadero potencial de la IA:</p>
+                
+                <div class="space-y-3">
+                    <!-- Item -->
+                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-black text-xl">R</div>
+                        <div>
+                            <p class="font-bold text-slate-800">ROL</p>
+                            <p class="text-sm text-slate-500">Define "quién" responde. Activa el vocabulario experto.</p>
+                        </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black text-xl">C</div>
+                        <div>
+                            <p class="font-bold text-slate-800">CONTEXTO</p>
+                            <p class="text-sm text-slate-500">El escenario. Sin esto, la IA adivina.</p>
+                        </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-200">E</div>
+                        <div>
+                            <p class="font-bold text-slate-800">ESPECIFICACIÓN</p>
+                            <p class="text-sm text-slate-500">La orden directa. Usa verbos de acción claros.</p>
+                        </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black text-xl">F</div>
+                        <div>
+                            <p class="font-bold text-slate-800">FORMATO</p>
+                            <p class="text-sm text-slate-500">Tabla, Código, Email, Lista...</p>
+                        </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-black text-xl">E</div>
+                        <div>
+                            <p class="font-bold text-slate-800">EJEMPLO</p>
+                            <p class="text-sm text-slate-500">La referencia para imitar estilo (Few-Shot).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-slate-100 bg-slate-50/50 rounded-b-[26px] text-center">
+                <button onclick="document.getElementById('guide-modal').classList.add('hidden')" class="btn-3d bg-slate-800 text-white px-10 py-3 rounded-xl font-bold hover:bg-slate-700">
+                    ¡Entendido!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-2xl transform translate-y-32 opacity-0 transition-all duration-300 flex items-center gap-4 border border-slate-700 z-50">
+        <div class="bg-green-500 text-white p-2 rounded-full shadow-lg shadow-green-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+            <p class="font-bold text-sm">¡Copiado al portapapeles!</p>
+            <p class="text-xs text-slate-400 font-medium">Listo para pegar en tu IA favorita.</p>
+        </div>
+    </div>
+
+    <script>
+        function generatePrompt() {
+            // 1. Capturar valores
+            const rol = document.getElementById('input-rol').value.trim();
+            const contexto = document.getElementById('input-contexto').value.trim();
+            const tarea = document.getElementById('input-tarea').value.trim();
+            const formato = document.getElementById('input-formato').value.trim();
+            const ejemplo = document.getElementById('input-ejemplo').value.trim();
+
+            // Validación simple
+            if (!rol && !tarea) {
+                // Shake effect on required fields (visual feedback)
+                document.getElementById('input-tarea').classList.add('ring-4', 'ring-red-200', 'border-red-400');
+                setTimeout(() => {
+                    document.getElementById('input-tarea').classList.remove('ring-4', 'ring-red-200', 'border-red-400');
+                }, 500);
+                alert("⚠️ ¡Hey! Al menos necesito un ROL y una TAREA para hacer magia.");
+                return;
+            }
+
+            // 2. Construir el Prompt Estructurado
+            let finalPrompt = "";
+
+            if (rol) finalPrompt += `### ROL\nActúa como ${rol}.\n\n`;
+            if (contexto) finalPrompt += `### CONTEXTO\n${contexto}\n\n`;
+            if (tarea) finalPrompt += `### TAREA\n${tarea}\n\n`;
+            if (formato) finalPrompt += `### FORMATO DE SALIDA\n${formato}\n\n`;
+            if (ejemplo) finalPrompt += `### EJEMPLO DE REFERENCIA (Estilo/Estructura)\n"""\n${ejemplo}\n"""\n\n`;
+
+            finalPrompt += `---\nINSTRUCCIONES ADICIONALES:\n- Sigue estrictamente el formato solicitado.\n- Evita generalidades.\n- Si falta información crítica, pregúntame antes de responder.`;
+
+            // 3. Mostrar resultado
+            const outputArea = document.getElementById('output-area');
+            outputArea.value = finalPrompt;
+            
+            document.getElementById('empty-state').classList.add('hidden');
+            rotateTip();
+        }
+
+        function copyToClipboard() {
+            const outputArea = document.getElementById('output-area');
+            if (!outputArea.value) return;
+
+            outputArea.select();
+            outputArea.setSelectionRange(0, 99999);
+            
+            navigator.clipboard.writeText(outputArea.value).then(() => {
+                showToast();
+            });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+
+        function clearFields() {
+            if(confirm('¿Reiniciar el generador? Se borrarán todos los campos.')) {
+                document.getElementById('input-rol').value = '';
+                document.getElementById('input-contexto').value = '';
+                document.getElementById('input-tarea').value = '';
+                document.getElementById('input-formato').value = '';
+                document.getElementById('input-ejemplo').value = '';
+                document.getElementById('output-area').value = '';
+                document.getElementById('empty-state').classList.remove('hidden');
+            }
+        }
+
+        function rotateTip() {
+            const tips = [
+                "Pro-Tip: Si la respuesta es muy larga, añade en Formato: 'Resumido en menos de 200 palabras'.",
+                "Pro-Tip: Usa el 'Ejemplo' para enseñar a la IA tu tono de voz (formal, divertido, sarcástico).",
+                "Pro-Tip: Si es una tarea compleja, añade al final: 'Piensa paso a paso' (Chain of Thought).",
+                "Pro-Tip: Pide siempre opciones. Ej: 'Dame 3 variantes del título'."
+            ];
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            document.getElementById('dynamic-tip').innerText = randomTip;
+        }
+    </script>
+</body>
+</html>

@@ -1,88 +1,103 @@
-<script>
-    function generatePrompt() {
-        // 1. Capturar valores
-        const rol = document.getElementById('input-rol').value.trim();
-        const contexto = document.getElementById('input-contexto').value.trim();
-        const tarea = document.getElementById('input-tarea').value.trim();
-        const formato = document.getElementById('input-formato').value.trim();
-        const ejemplo = document.getElementById('input-ejemplo').value.trim();
-
-        // Validación simple
-        if (!rol && !tarea) {
-            alert("Por favor, llena al menos el ROL y la TAREA para generar un prompt útil.");
-            return;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtu360 | Johnny Bermúdez - Constructor Maestro de Prompts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            /* Azul -> Naranja */
+            background: linear-gradient(to right, #2563eb, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        // 2. Construir el Prompt Estructurado (Ingeniería de Prompts)
-        let finalPrompt = "";
-
-        if (rol) finalPrompt += `### ROL\nActúa como ${rol}.\n\n`;
-        if (contexto) finalPrompt += `### CONTEXTO\n${contexto}\n\n`;
-        if (tarea) finalPrompt += `### TAREA\n${tarea}\n\n`;
-        if (formato) finalPrompt += `### FORMATO DE SALIDA\n${formato}\n\n`;
-        if (ejemplo) finalPrompt += `### EJEMPLO DE REFERENCIA (Estilo/Estructura)\n"""\n${ejemplo}\n"""\n\n`;
-
-        // Instrucción de cierre para asegurar calidad
-        finalPrompt += `---\nINSTRUCCIONES ADICIONALES:\n- Asegúrate de seguir estrictamente el formato solicitado.\n- Evita generalidades, sé específico y directo.\n- Si falta información crítica en el contexto, hazme una pregunta antes de generar la respuesta final.`;
-
-        // 3. Mostrar resultado
-        const outputArea = document.getElementById('output-area');
-        outputArea.value = finalPrompt;
-
-        // Ocultar empty state
-        document.getElementById('empty-state').classList.add('hidden');
-
-        // Rotar consejos
-        rotateTip();
-    }
-
-    function copyToClipboard() {
-        const outputArea = document.getElementById('output-area');
-        if (!outputArea.value) return;
-
-        outputArea.select();
-        outputArea.setSelectionRange(0, 99999); // Móvil
-
-        navigator.clipboard.writeText(outputArea.value).then(() => {
-            showToast();
-        });
-    }
-
-    function showToast() {
-        const toast = document.getElementById('toast');
-        toast.classList.remove('translate-y-20', 'opacity-0');
-        setTimeout(() => {
-            toast.classList.add('translate-y-20', 'opacity-0');
-        }, 3000);
-    }
-
-    function clearFields() {
-        if (confirm('¿Borrar todos los campos?')) {
-            document.getElementById('input-rol').value = '';
-            document.getElementById('input-contexto').value = '';
-            document.getElementById('input-tarea').value = '';
-            document.getElementById('input-formato').value = '';
-            document.getElementById('input-ejemplo').value = '';
-            document.getElementById('output-area').value = '';
-            document.getElementById('empty-state').classList.remove('hidden');
+        .step-card {
+            transition: all 0.3s ease;
         }
-    }
+        .step-card:focus-within {
+            /* Resaltado en azul */
+            border-color: #2563eb;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    // --- Tips dinámicos ---
-    const tips = [
-        'El contexto es el rey. Si la IA alucina, suele ser porque le faltan datos de fondo en el bloque "Contexto".',
-        'Mientras más claro sea el rol, más especializado será el lenguaje y la respuesta de la IA.',
-        'Usa verbos de acción en la TAREA: analiza, compara, resume, diseña, corrige, etc.',
-        'Define siempre el formato de salida: tabla, lista, pasos numerados o código.',
-        'Agrega un ejemplo en el bloque "Ejemplo" para que la IA imite tono, estilo y estructura.'
-    ];
-    let tipIndex = 0;
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-600 text-white p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl tracking-tight text-slate-900">
+                        Virtu<span class="text-orange-500">360</span>
+                    </h1>
+                    <p class="text-xs text-slate-500">Johnny Bermúdez · Constructor Maestro de Prompts</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('guide-modal').classList.remove('hidden')" class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                ¿Cómo funciona?
+            </button>
+        </div>
+    </header>
 
-    function rotateTip() {
-        const tipElement = document.getElementById('dynamic-tip');
-        if (!tipElement) return;
+    <!-- Main Content -->
+    <main class="flex-grow max-w-5xl mx-auto px-4 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Input Form -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-bold mb-2">Diseña tu Instrucción</h2>
+                <p class="text-slate-500 text-sm mb-6">Rellena los bloques. No te preocupes por la redacción, el sistema lo estructurará por ti.</p>
 
-        tipIndex = (tipIndex + 1) % tips.length;
-        tipElement.textContent = tips[tipIndex];
-    }
-</script>
+                <!-- ROL -->
+                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+                        <span class="bg-blue-100 text-blue-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">R</span>
+                        ROL (Persona)
+                    </label>
+                    <p class="text-xs text-slate-400 mb-2">¿Quién debe ser la IA? (Experto, Crítico, Creativo...)</p>
+                    <input type="text" id="input-rol" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Eres un experto en Marketing Digital con 10 años de experiencia...">
+                </div>
+
+                <!-- CONTEXTO -->
+                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+                        <span class="bg-indigo-100 text-indigo-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">C</span>
+                        CONTEXTO
+                    </label>
+                    <p class="text-xs text-slate-400 mb-2">¿Cuál es la situación? Datos clave, audiencia, limitaciones.</p>
+                    <textarea id="input-contexto" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Estamos lanzando una marca de café orgánico en Instagram. La audiencia son jóvenes de 20-30 años..."></textarea>
+                </div>
+
+                <!-- ESPECIFICACIÓN (TAREA) -->
+                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white ring-2 ring-indigo-50/50">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+                        <span class="bg-purple-100 text-purple-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">E</span>
+                        ESPECIFICACIÓN (Tarea)
+                    </label>
+                    <p class="text-xs text-slate-400 mb-2">¿Qué debe hacer exactamente? Usa verbos de acción.</p>
+                    <textarea id="input-tarea" rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Redacta 5 ideas de contenido viral y escribe los guiones para los videos."></textarea>
+                </div>
+
+                <!-- FORMATO -->
+                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+                        <span class="bg-pink-100 text-pink-700 w-6 h-6 flex items-center justify-center rounded-full text-xs">F</span>
+                        FORMATO
+                    </label>
+                    <p class="text-xs text-slate-400 mb-2">¿Cómo quieres que se vea la respuesta? (Tabla, Código, Lista...)</p>
+                    <input type="text" id="input-formato" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors" placeholder="Ej: Tabla comparativa, lista con viñetas, código Python, tono formal...">
+                </div>
+
+                <!-- EJEMPLO -->
+                <div class="step-card border border-slate-200 rounded-xl p-4 mb-4 bg-white">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+                        <span class="bg-emerald-100 text-emerald-700 w-6 h-6 flex items-center justify-center
